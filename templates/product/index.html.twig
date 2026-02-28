@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue Tech-Flow | Équipements High-Tech{% endblock %}
+
+{% block body %}
+<div class="bg-gray-50/50 min-h-screen py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {# En-tête #}
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-black text-gray-900 tracking-tighter mb-4">
+                Équipements <span class="text-blue-600 italic">Tech-Flow</span>
+            </h1>
+            <p class="text-gray-500 text-lg max-w-2xl mx-auto font-medium">
+                Propulsez votre setup avec notre matériel sélectionné pour la performance.
+            </p>
+        </header>
+
+        {# Grille des produits #}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {% for product in products %}
+                {# Carte Produit #}
+                <article class="group bg-white rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col overflow-hidden">
+                    
+                    <div class="p-8 grow">
+                        <div class="flex justify-between items-start mb-6">
+                            {# Badge Catégorie #}
+                            <span class="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-blue-50 text-blue-600 border border-blue-100/50">
+                                {{ product.category.name }}
+                            </span>
+                            {# Prix convertis en euros #}
+                            <div class="text-right">
+                                <span class="text-3xl font-black text-gray-900 leading-none">{{ product.price / 100 }}€</span>
+                            </div>
+                        </div>
+                        
+                        <h2 class="text-2xl font-extrabold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">
+                            {{ product.name }}
+                        </h2>
+                        <p class="text-gray-500 text-sm leading-relaxed line-clamp-3 font-medium">
+                            {{ product.description }}
+                        </p>
+                    </div>
+
+                    {# Footer de la carte #}
+                    <div class="px-8 py-7 bg-gray-50/80 border-t border-gray-100 flex justify-between items-center mt-auto">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-1">Disponibilité</span>
+                            <div class="flex items-center gap-2">
+                                {# Petit point lumineux animé #}
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ product.stock > 0 ? 'bg-emerald-400' : 'bg-rose-400' }} opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 {{ product.stock > 0 ? 'bg-emerald-500' : 'bg-rose-500' }}"></span>
+                                </span>
+                                <span class="text-sm {{ product.stock > 0 ? 'text-emerald-700' : 'text-rose-700' }} font-bold">
+                                    {{ product.stock > 0 ? 'En stock (' ~ product.stock ~ ')' : 'Épuisé' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {# Lien vers la page de détail #}
+                        {# <a href="{{ path('app_product_show', { slug: product.slug }) }}" class="bg-gray-900 text-white px-7 py-3.5 rounded-2xl font-bold text-sm hover:bg-blue-600 transition-all shadow-xl hover:shadow-blue-500/30 active:scale-95">
+                            Voir le produit
+                        </a> #}
+                    </div>
+                </article>
+            {% else %}
+                {# Si aucun produit n'est trouvé #}
+                <div class="col-span-full text-center py-24 bg-white rounded-[3rem] border-2 border-dashed border-gray-100">
+                    <p class="text-gray-400 text-xl font-bold">Le catalogue est vide pour le moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
