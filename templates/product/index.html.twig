@@ -1,76 +1,80 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Catalogue Tech-Flow | Équipements High-Tech{% endblock %}
+{% block title %}Catalogue Tech-Flow | Matériel Informatique Professionnel{% endblock %}
 
 {% block body %}
-<div class="bg-gray-50/50 min-h-screen py-16">
+<main class="min-h-screen py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {# En-tête #}
-        <header class="text-center mb-16">
-            <h1 class="text-5xl font-black text-gray-900 tracking-tighter mb-4">
-                Équipements <span class="text-blue-600 italic">Tech-Flow</span>
+        {# --- En-tête --- #}
+        <header class="flex flex-col items-center md:block mb-10 pb-6 border-b border-gray-200">
+            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">
+                Tous les produits
             </h1>
-            <p class="text-gray-500 text-lg max-w-2xl mx-auto font-medium">
-                Propulsez votre setup avec notre matériel sélectionné pour la performance.
+            <p class="text-sm text-gray-700 mt-2" aria-live="polite">
+                {{ products|length }} produits trouvés
             </p>
         </header>
 
-        {# Grille des produits #}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {# --- Grille --- #}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 md:gap-x-6 gap-y-5 md:gap-y-10">
             {% for product in products %}
-                {# Carte Produit #}
-                <article class="group bg-white rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col overflow-hidden">
+                {# --- Carte Produit --- #}
+                <article class="bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col group">
                     
-                    <div class="p-8 grow">
-                        <div class="flex justify-between items-start mb-6">
-                            {# Badge Catégorie #}
-                            <span class="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-blue-50 text-blue-600 border border-blue-100/50">
-                                {{ product.category.name }}
-                            </span>
-                            {# Prix convertis en euros #}
-                            <div class="text-right">
-                                <span class="text-3xl font-black text-gray-900 leading-none">{{ product.price / 100 }}€</span>
-                            </div>
-                        </div>
+                    {# --- Zone Image --- #}
+                    <div class="aspect-4/3 w-full rounded-t-lg bg-white flex items-center justify-center overflow-hidden p-4 relative">
+                        <img src="{{ asset('uploads/images/ecran.jpg') }}" 
+                            alt="Photo du produit : {{ product.name }}" 
+                            class="object-contain w-full h-full mix-blend-multiply transform group-hover:scale-105 transition-transform duration-500 ease-out">
+                    </div>
+                    
+                    {# --- Contenu de la carte --- #}
+                    <div class="p-4 flex flex-col grow">
+                        {# --- Catégorie --- #}
+                        <span class="text-xs font-medium text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded-full self-start mb-2">
+                            {{ product.category.name }}
+                        </span>
                         
-                        <h2 class="text-2xl font-extrabold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">
+                        {# --- Titre --- #}
+                        <h2 class="text-md font-semibold text-gray-900 hover:text-blue-800 mb-1">
                             {{ product.name }}
                         </h2>
-                        <p class="text-gray-500 text-sm leading-relaxed line-clamp-3 font-medium">
+                        
+                        {# --- Description --- #}
+                        <p class="text-xs text-gray-700 line-clamp-2 mb-3">
                             {{ product.description }}
                         </p>
-                    </div>
-
-                    {# Footer de la carte #}
-                    <div class="px-8 py-7 bg-gray-50/80 border-t border-gray-100 flex justify-between items-center mt-auto">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-1">Disponibilité</span>
-                            <div class="flex items-center gap-2">
-                                {# Petit point lumineux animé #}
-                                <span class="relative flex h-2 w-2">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ product.stock > 0 ? 'bg-emerald-400' : 'bg-rose-400' }} opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2 w-2 {{ product.stock > 0 ? 'bg-emerald-500' : 'bg-rose-500' }}"></span>
-                                </span>
-                                <span class="text-sm {{ product.stock > 0 ? 'text-emerald-700' : 'text-rose-700' }} font-bold">
-                                    {{ product.stock > 0 ? 'En stock (' ~ product.stock ~ ')' : 'Épuisé' }}
+                        
+                        {# --- Prix et stock --- #}
+                        <div class="mt-auto pt-3 border-t border-gray-100">
+                            <div class="flex justify-between items-baseline mb-3">
+                                {# --- Prix --- #}
+                                <span class="text-lg font-bold text-black" aria-label="Prix : {{ (product.price / 100)|number_format(2,',',' ')}} euros">
+                                    {{ (product.price / 100)|number_format(2,',',' ')}}€
+                                </span>                                
+                                {# --- Stock --- #}
+                                <span class="text-xs {{ product.stock > 0 ? 'text-green-800' : 'text-red-700' }} font-bold">
+                                    {{ product.stock > 0 ? 'En stock' : 'Rupture' }}
                                 </span>
                             </div>
-                        </div>
 
-                        {# Lien vers la page de détail #}
-                        {# <a href="{{ path('app_product_show', { slug: product.slug }) }}" class="bg-gray-900 text-white px-7 py-3.5 rounded-2xl font-bold text-sm hover:bg-blue-600 transition-all shadow-xl hover:shadow-blue-500/30 active:scale-95">
-                            Voir le produit
-                        </a> #}
+                            {# --- Bouton de redirection --- #}
+                            <a href="{{ path('app_product_show', { slug: product.slug }) }}" 
+                               aria-label="Voir les détails du produit : {{ product.name }}"
+                               class="block text-center bg-black hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 text-white rounded-xl py-2.5 px-4 text-sm font-semibold transition-colors outline-none">
+                                Voir le produit
+                            </a>
+                        </div>
                     </div>
                 </article>
             {% else %}
-                {# Si aucun produit n'est trouvé #}
-                <div class="col-span-full text-center py-24 bg-white rounded-[3rem] border-2 border-dashed border-gray-100">
-                    <p class="text-gray-400 text-xl font-bold">Le catalogue est vide pour le moment.</p>
+                {# Si aucun produit #}
+                <div class="col-span-full text-center py-20 bg-white rounded-lg border border-gray-200 shadow-inner">
+                    <p class="text-gray-700 font-medium">Aucun produit disponible actuellement.</p>
                 </div>
             {% endfor %}
         </div>
     </div>
-</div>
+</main>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,4 +18,20 @@ final class ProductController extends AbstractController
             'products' => $products ,
         ]);
     }
+
+    #[Route('/product/{slug}', name: 'app_product_show')]
+    public function showone(string $slug, ProductRepository $productRepository): Response
+    {
+        $product = $productRepository->findOneBy(['slug' => $slug]);
+
+        if (!$product) {
+            throw $this->createNotFoundException('Ce produit n\'existe pas.');
+        }
+
+        return $this->render('product/show.html.twig', [
+            'product' => $product,
+        ]);
+    }
+
+
 }
