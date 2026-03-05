@@ -53,7 +53,7 @@
                 </div>
 
                 {# Formulaire ajout panier #}
-                <form action="#" method="POST" class="mb-4">
+                <form action="{{ path('app_cart_add', {id: product.id}) }}" method="POST" class="mb-4">
                     {# Sélection Quantité Dynamique (Si en stock) #}
                     {% if product.stock > 0 %}
                         <div class="mb-4">

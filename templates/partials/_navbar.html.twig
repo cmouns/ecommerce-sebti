@@ -27,10 +27,8 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     </button>
                     
-                    {# L'ASTUCE EST ICI : on ajoute 'pt-2' (padding-top) sur la div absolute pour créer le pont invisible #}
                     <div class="absolute right-0 top-[80%] pt-4 hidden group-hover:block w-56 z-50">
                         
-                        {# Et voici la vraie boîte blanche qui contient les liens #}
                         <div class="bg-white rounded-lg shadow-xl py-2 border border-gray-100">
                             {% if app.user %}
                                 <div class="px-4 py-3 border-b border-gray-100 bg-gray-50 rounded-t-lg">
@@ -51,21 +49,24 @@
                 </div>
 
                 {# Icône Panier #}
-                <a href="#" class="relative text-gray-300 hover:text-white transition-colors" aria-label="Voir mon panier">
+                <a href="{{ path('app_cart_index')}}" class="relative text-gray-300 hover:text-white transition-colors" aria-label="Voir mon panier">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     {# Badge  #}
-                    <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md">0</span>
+                    {% set count = cart_count() %}
+                    {% if count > 0 %}
+                    <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md">{{ cart_count() }}</span>
+                    {% endif %}
                 </a>
             </div>
         </div>
     </div>
 
-    {# --- BARRE INFÉRIEURE (Administration & Navigation Catégories) --- #}
+    {# --- BARRE INFÉRIEURE --- #}
     <div class="bg-gray-800 border-t border-gray-700 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ul class="flex items-center space-x-8 h-12 overflow-x-auto no-scrollbar">
                 
-                {# Menu Admin (Sécurisé par le rôle) #}
+                {# Menu Admin  #}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="relative group h-full flex items-center shrink-0">
                         <button class="text-red-400 font-bold text-sm uppercase tracking-wider flex items-center gap-1 hover:text-red-300 transition-colors h-full">
@@ -81,14 +82,11 @@
                         </div>
                     </li>
                     
-                    {# Séparateur visuel #}
                     <li class="text-gray-600 hidden md:block">|</li>
                 {% endif %}
 
-                {# Liens publics #}
                 <li><a href="{{ path('app_product_index') }}" class="text-gray-300 hover:text-white text-sm font-medium whitespace-nowrap transition-colors">Tous les produits</a></li>
                 
-                {# Ici, tu pourras boucler sur tes catégories réelles plus tard #}
                 <li><a href="#" class="text-gray-300 hover:text-white text-sm font-medium whitespace-nowrap transition-colors">Composants</a></li>
                 <li><a href="#" class="text-gray-300 hover:text-white text-sm font-medium whitespace-nowrap transition-colors">Périphériques</a></li>
                 <li><a href="#" class="text-gray-300 hover:text-white text-sm font-medium whitespace-nowrap transition-colors">Setup Bureau</a></li>
